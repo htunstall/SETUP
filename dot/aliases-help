@@ -1,0 +1,84 @@
+ NOTE: This file was automatically extracted from the RCS file:
+
+ $Id$
+
+ @(#) Help file for personal 'bash' aliases: $HOME/SETUP/dot/aliases.bash
+------------------------------------------------------------------------
+
+ NOTE: Where '(path optional)' appears the default is the current directory
+
+------------------------------------------------------------------------
+ Saftey first
+ -----------------------------------------------------------------------
+ cp         - cp -i
+ mv         - mv -i
+ rm         - rm -i
+
+------------------------------------------------------------------------
+ Common mis-spellings
+ -----------------------------------------------------------------------
+ gerp       - grep
+ jbos       - jobs
+ lll        - ll
+ mroe       - more
+ mkdri      - mkdir
+ pdw        - pwd
+
+------------------------------------------------------------------------
+ Shorthand
+ -----------------------------------------------------------------------
+ a          - alias
+ f          - find
+ m          - more
+ j          - jobs
+ l          - less
+ pf         - print functions
+
+------------------------------------------------------------------------
+ Environment helpers
+ -----------------------------------------------------------------------
+ envg       - grep environment settings
+ psg        - Run 'ps' and 'grep' for word supplied
+
+------------------------------------------------------------------------
+ Directory based
+ -----------------------------------------------------------------------
+ ..         - cd ..
+ ,          - cd -
+ cd         - 'cd' but if a file will truncate to the directory
+ ds         - dirs (with nice formatting)
+ pd         - pushd
+ go         - pushd +<#>
+ up         - pushd ..
+ drop       - popd +<#>
+
+------------------------------------------------------------------------
+ Directory listing
+ -----------------------------------------------------------------------
+ ll         - List files with the 'lsWithCommas' script
+ ll.        - List '.' files
+ ltr        - List files in reverse time order
+ llt        - List files modified today
+ End        - List the last ten newest files (wildcard optional)
+              If the first argument is -XX then use to return XX lines
+ lld        - List only directories in long format (path optional)
+ llf        - List only files       in long format (path optional)
+
+------------------------------------------------------------------------
+ Path info
+ -----------------------------------------------------------------------
+ path       - More readable form of the path output
+ h          - Print history information:
+              usage: h [-h] [search1] [search2]
+              - no  arguments = all history
+              - one argument  = grep for 'search1' in history
+              - two arguments = grep for 'search2' then 'search2' in history
+              - more than two arguments - use the first two as above
+ f.           - Find files starting below the current directory
+ f.g          - Find files starting below the current directory and use a
+                (case insensitive) search within them using an 'xargs' loop 
+
+ Aliases for starting things
+ ===========================
+ title       - Set the shell title
+ stt         - Set the title of the shell (makes it easier to find...)
