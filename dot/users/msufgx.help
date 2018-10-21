@@ -1,0 +1,46 @@
+ NOTE: This file was automatically extracted from the RCS file:
+
+ $Id$
+
+ @(#) Help file for personal 'bash' aliases: 
+                                      $HOME/SETUP/dot/users/msufgx.bash
+---------------------------------------------------------------------------
+
+ NOTE: Where '(path optional)' appears the default is the current directory
+
+===========================================================================
+ Additions by: Harry Tunstall
+---------------------------------------------------------------------------
+ Directory Listing/Moving
+---------------------------------------------------------------------------
+
+   The username variable is to enable easy sharing of the alias' file
+    between the University of Warwick SCRPT user accounts
+
+  gts        - cd /storage/chem/$username/postgrad
+                                          # Go to the storage directory
+  gtgit      - cd /storage/chem/$username/postgrad/software
+                                          # Go to the gits directory
+
+---------------------------------------------------------------------------
+ SSH Alias'
+---------------------------------------------------------------------------
+
+  ssh-orac   - ssh $username@orac.csc.warwick.ac.uk
+                                          # Connects to orac using the
+                                             ssh pub/priv key pair and
+                                             the username variable
+  ssh-tinis  - The same as above but for tinis
+
+--------------------------------------------------------------------------
+ Additions to the PATH
+--------------------------------------------------------------------------
+  Turbomole scripts added to path
+  Turbomole TURBODIR exported to env
+  Ovito bin added to path
+
+--------------------------------------------------------------------------
+ Modules to load
+--------------------------------------------------------------------------
+  Loaded VMD
+  Loaded GCC

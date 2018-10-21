@@ -1,4 +1,3 @@
-
 #%#---------------------------------------------------------------------
 #%# $Id$
 #%#
@@ -57,25 +56,56 @@
       #3# is needed to execute the command but it give more room on the line
       #3# for the help description!
 
-#================================My Aliases===================================
-username="msufgx"
-### Deprecieated?
-alias qq="qstat -u $username | less"
-alias djsub="qsub job.pbs -q ugchem" # Submit the job.pbs file to the COW
-alias sub="qsub *.pbs -q ugchem"
-###
-
+##############################################################################
+### Help file header information
+##############################################################################
+##H NOTE: This file was automatically extracted from the RCS file:
+##H
+##H $Id$
+##H
+##H @(#) Help file for personal 'bash' aliases: $HOME/SETUP/dot/aliases.bash
+##H------------------------------------------------------------------------
+##H
+##H NOTE: Where '(path optional)' appears the default is the current directory
+##H
+##H========================================================================
+##H Additions by: Harry Tunstall
+##H------------------------------------------------------------------------
+##H Directory Listing/Moving
+##H------------------------------------------------------------------------
+##H
+##H  lf         - ls -logh --color=always    # List files
+##H  laf        - ls -logha --color=always   # List all files
+##H  lft        - ls -loghtr --color=always  # List files in reverse time order
 alias lf="ls -logh --color=always"
-alias laf="ls -alogh --color=always"
-
-alias gts="cd /storage/chem/$username/postgrad"
+alias laf="ls -logha --color=always"
+alias lft="ls -loghtr --color=always"
+##H
+##H------------------------------------------------------------------------
+##H Script Aliases
+##H------------------------------------------------------------------------
+##H
+##H  shsing     - singularity_shell.sh       # SHell in SINGularity
+##H  pya        - python_anaconda.sh         # PYthon Anaconda 
+##H  asc        - ase_structure_converter.py # Ase Struc. Converter
+##H  clean      - clean-test-dir.sh          # Cleans test directory
+##H  start-jnbk-svr - starts a detached screen running a jup-nbk
+##H  kill-jnbk-srv  - kills the screen running the jupyter notebook server
 alias shsing="singularity_shell.sh"
 alias pya="python_anaconda.sh"
-
-alias ssh-orac="ssh $username@orac.csc.warwick.ac.uk"
-alias ssh-tinis="ssh $username@tinis.csc.warwick.ac.uk"
-
-#================================My Aliases==================================
+alias asc="ase_structure_converter.py"
+alias clean="source ~/bin/clean-test-dir.sh"
+alias start-jnbk-svr="jupyter_notebook_server_start.sh"
+alias kill-jnbk-svr="screen -X -S jnbk_server quit"
+##H------------------------------------------------------------------------
+##H Other Aliases
+##H------------------------------------------------------------------------
+##H
+##H  tunnel-ssh
+alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.csc.warwick.ac.uk"
+alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+##H========================================================================
+##H
 
 ##############################################################################
 ### Help file header information
@@ -92,9 +122,9 @@ alias ssh-tinis="ssh $username@tinis.csc.warwick.ac.uk"
 ##H
 ##H------------------------------------------------------------------------
 ##H Saftey first
-##H -----------------------------------------------------------------------
-##H cp         - cp -i
+##H
 ##H mv         - mv -i
+##H cp         - cp -i
 ##H rm         - rm -i
 function cp()
 {
@@ -127,9 +157,9 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 ##H
-##H------------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H Common mis-spellings
-##H -----------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H gerp       - grep
 ##H jbos       - jobs
 ##H lll        - ll
@@ -144,9 +174,9 @@ alias mkdri=mkdir
 alias pdw=pwd
 
 ##H
-##H------------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H Shorthand
-##H -----------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H a          - alias
 ##H f          - find
 ##H m          - more
@@ -169,9 +199,9 @@ function pf()
 }
 
 ##H
-##H------------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H Environment helpers
-##H -----------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H envg       - grep environment settings
 alias envg='env | grep -i'
 
@@ -182,9 +212,9 @@ function psg()
 }
 
 ##H
-##H------------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H Directory based
-##H -----------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H ..         - cd ..
 ##H ,          - cd -
 alias ..='cd ..'
@@ -258,7 +288,7 @@ alias up='pushd .. > /dev/null; ds'
 ##H
 ##H------------------------------------------------------------------------
 ##H Directory listing
-##H -----------------------------------------------------------------------
+##H------------------------------------------------------------------------
 ##H ll         - List files with the 'lsWithCommas' script
 ##H ll.        - List '.' files
 ##H ltr        - List files in reverse time order
@@ -302,7 +332,7 @@ alias up='pushd .. > /dev/null; ds'
 ##H
 ##H------------------------------------------------------------------------
 ##H Path info
-##H -----------------------------------------------------------------------
+##H-----------------------------------------------------------------------
 ##H path       - More readable form of the path output
 function path()
 {
