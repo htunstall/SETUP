@@ -91,7 +91,7 @@ alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process
 ##H Additions to the PATH
 ##H--------------------------------------------------------------------------
 ##H
-##H  N/A
+export PATH="/home/harry/anaconda3/bin:$PATH"
 ##H
 ##H--------------------------------------------------------------------------
 ##H Modules to load

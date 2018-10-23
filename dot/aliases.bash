@@ -80,6 +80,7 @@
 alias lf="ls -logh --color=always"
 alias laf="ls -logha --color=always"
 alias lft="ls -loghtr --color=always"
+alias ..="cd .."
 ##H
 ##H------------------------------------------------------------------------
 ##H Script Aliases
