@@ -1,5 +1,5 @@
 #!/bin/bash
-usage="${0##*/} [options] -- Moves all non-default files to the raw-data directory:
+usage="$(basename $0) [options] -- Moves all non-default files to the raw-data directory:
    Options:
      -h        Displays this help
      -d        Deletes all non-default files in the directory (Takes precedence over the -o arg)
@@ -7,7 +7,7 @@ usage="${0##*/} [options] -- Moves all non-default files to the raw-data directo
      -f        Force overwrite without prompting"
 git_repo_path="/storage/chem/msufgx/postgrad/software/SiC-framework"
 
-# Default to not delete files in the directory
+# Default to not (force) delete/overwrite files in the directory
 delete=False
 overwrite=False
 force=False
@@ -32,9 +32,7 @@ done
 
 # Initialise variables
 data_path="$git_repo_path/raw-data"
-cwd=$(pwd)
-basename=${cwd##*/}
-
+basename=$(basename $(pwd))
 # If we're in the correct directory
 if [ "$basename" == "run_dir" ]; then
    # If the hidden directory doesn't exist make it
