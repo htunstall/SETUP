@@ -34,7 +34,7 @@ if [ "$PS1" ]; then
    if [ "$SINGULARITY_CONTAINER" ]; then
       # We're in singularity; place the running scripts dir on the PATH
       export PATH=$PATH:/storage/chem/$USER/postgrad/software/testing-framework/scripts
-      add_str="\n\e[1mSingularity Container: \e[31m$sing_img_name"
+      add_str="\n\e[1mSingularity Container: \e[34m$sing_img_name"
    fi
 
    #-------------------------------------------------------------------
