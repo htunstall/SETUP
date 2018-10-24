@@ -47,9 +47,9 @@ if [ "$basename" == "run_dir" ]; then
 
    if [ "$delete" == True ]; then
       if [ "$force" == True ]; then
-         rm -f *
+         rm -r -f *
       else
-         rm -i *
+         rm -r -i *
       fi
    else
       # For each *.json file in the testing directory
