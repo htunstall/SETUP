@@ -114,5 +114,10 @@ export PATH=$PATH:~/ovito-2.9.0-x86_64/bin/
 ##H  Loaded VMD
 ##H  Loaded GCC
 module load VMD/1.9.1
-module load GCC/6.4.0-2.28
+#odule load GCC/6.4.0-2.28
+#module unload GCCcore
+module load intel/2018.1.163-GCC-6.4.0-2.28
+module load binutils/2.28
+module load impi/2018.1.163
+module load QuantumESPRESSO
 #H========================================================================

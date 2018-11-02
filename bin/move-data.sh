@@ -36,7 +36,7 @@ basename=$(basename $(pwd))
 # If we're in the correct directory
 if [ "$basename" == "run_dir" ]; then
    # If the hidden directory doesn't exist make it
-   if [ ! -d "$cwd/.default-files" ]; then
+   if [ ! -d ".default-files" ]; then
       mkdir .default-files
    fi
    # Move the default files to a safe directory
@@ -67,7 +67,7 @@ if [ "$basename" == "run_dir" ]; then
                mv -i *$general_filename* $data_path
             fi
 
-            echo "Data files for '*$general_filename*' moved to '/raw-data'"
+            printf "Data files for %-60s moved to '/raw-data'\n" "'*$general_filename*'"
          fi
       done
    fi
