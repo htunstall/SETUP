@@ -85,7 +85,7 @@
 ##H  tunnel-ssh      - Port forward to localhost:8888 from barbagallo lh:8888
 ##H  tunnel-status   - Show the precesses with ssh in their name
 alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.csc.warwick.ac.uk"
-alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+alias tunnel-status="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
 ##H
 ##H--------------------------------------------------------------------------
 ##H Additions to the PATH
