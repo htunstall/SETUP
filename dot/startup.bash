@@ -12,20 +12,20 @@ if [ "$PS1" ]; then
    # Grab the group being used currently
    #-------------------------------------------------------------------
    export GROUP=$(groups | awk '{print $1}')
-  
+
    #-------------------------------------------------------------------
    # Aliases
    #-------------------------------------------------------------------
+   # Load general aliases and functions
+   if [ -f ~/SETUP/dot/aliases.bash ]; then
+         . ~/SETUP/dot/aliases.bash
+   fi
+
    # If user specific aliases are found, load them
    if [ -f ~/SETUP/dot/users/${USER}.bash ]; then
          . ~/SETUP/dot/users/${USER}.bash
    fi
 
-   # Load general aliases and functions
-   if [ -f ~/SETUP/dot/aliases.bash ]; then
-         . ~/SETUP/dot/aliases.bash
-   fi
-  
    #-------------------------------------------------------------------
    # Check to see if we are in a singularity container
    #-------------------------------------------------------------------
