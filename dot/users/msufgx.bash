@@ -83,8 +83,51 @@
 ##H                                          # Go to the storage directory
 ##H  gtgit      - cd /storage/chem/$username/postgrad/software
 ##H                                          # Go to the gits directory
+##H  lf         - ls -logh --color=always    # List files
+##H  laf        - ls -logha --color=always   # List all files
+##H  lft        - ls -loghtr --color=always  # List files in reverse time order  
 alias gts="cd /storage/chem/$USER/postgrad"
 alias gtgit="cd /storage/chem/$USER/postgrad/software"
+alias lf="ls -logh --color=always"
+alias laf="ls -logha --color=always"
+alias lft="ls -loghtr --color=always"
+
+##H
+##H-------------------------------------------------------------------
+##H Check what server we're on 
+##H-------------------------------------------------------------------
+##H
+#manpath=$(env | grep MANPATH)
+#server=$(cut -d'/' -f3 <<< $manpath)
+#echo $server
+#if [[ "$server" == "share" ]]; then
+##H
+##H------------------------------------------------------------------------
+##H Script Aliases
+##H------------------------------------------------------------------------
+##H
+##H  shsing     - singularity_shell.sh       # SHell in SINGularity
+##H  pya        - python_anaconda.sh         # PYthon Anaconda 
+##H  asc        - ase_structure_converter.py # Ase Struc. Converter
+##H  clean      - clean-test-dir.sh          # Cleans test directory
+##H  start-jnbk-svr - starts a detached screen running a jup-nbk
+##H  kill-jnbk-srv  - kills the screen running the jupyter notebook server
+alias shsing="singularity_shell.sh"
+alias pya="python_anaconda.sh"
+alias asc="ase_structure_converter.py"
+alias clean="source ~/bin/clean-test-dir.sh"
+alias start-jnbk-svr="jupyter_notebook_server_start.sh"
+alias kill-jnbk-svr="screen -X -S jnbk_server quit"
+
+##H
+##H------------------------------------------------------------------------
+##H Other Aliases
+##H------------------------------------------------------------------------
+##H
+##H  tunnel-ssh
+alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.csc.warwick.ac.uk"
+alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+
 ##H
 ##H---------------------------------------------------------------------------
 ##H SSH Alias'
@@ -95,18 +138,28 @@ alias gtgit="cd /storage/chem/$USER/postgrad/software"
 ##H                                             ssh pub/priv key pair and
 ##H                                             the username variable
 ##H  ssh-tinis  - The same as above but for tinis
-alias ssh-orac="ssh $USER@orac.csc.warwick.ac.uk"
-alias ssh-tinis="ssh $USER@tinis.csc.warwick.ac.uk"
+alias orac="ssh $USER@orac.csc.warwick.ac.uk"
+alias tinis="ssh $USER@tinis.csc.warwick.ac.uk"
+
 ##H
 ##H--------------------------------------------------------------------------
 ##H Additions to the PATH
 ##H--------------------------------------------------------------------------
 ##H  Turbomole scripts added to path
+export PATH=$PATH:$HOME/Turbomole/TURBOMOLE/bin/em64t-unknown-linux-gnu:/home/chem/msufgx/Turbomole/TURBOMOLE/scripts
+
 ##H  Turbomole TURBODIR exported to env
+export TURBODIR=$HOME/Turbomole/TURBOMOLE
+
 ##H  Ovito bin added to path
-export PATH=$PATH:~/Turbomole/TURBOMOLE/bin/em64t-unknown-linux-gnu:/home/chem/msufgx/Turbomole/TURBOMOLE/scripts
-export TURBODIR=~/Turbomole/TURBOMOLE
-export PATH=$PATH:~/ovito-2.9.0-x86_64/bin/
+export PATH=$HOME/ovito-2.9.0-x86_64/bin/:$PATH
+
+##H  Mendeley Desktop added to path
+export PATH=$HOME/programs/mendeleydesktop-1.19.2-linux-x86_64/bin:$PATH
+
+##H  LAMMPS script path
+export PATH=/storage/chem/msufgx/postgrad/software/SiC-framework/testing-dir/lammps/scripts/lammps:$PATH
+
 ##H
 ##H--------------------------------------------------------------------------
 ##H Modules to load
@@ -114,10 +167,14 @@ export PATH=$PATH:~/ovito-2.9.0-x86_64/bin/
 ##H  Loaded VMD
 ##H  Loaded GCC
 module load VMD/1.9.1
-#odule load GCC/6.4.0-2.28
-#module unload GCCcore
 module load intel/2018.1.163-GCC-6.4.0-2.28
 module load binutils/2.28
 module load impi/2018.1.163
 module load QuantumESPRESSO
+##H Otherwise we're on tinnis/orac
+#else
+#   module load GCC/6.4.0-2.28
+#   module load OpenMPI/2.1.2
+#   module load OpenBLAS/0.2.20
+#fi
 #H========================================================================
