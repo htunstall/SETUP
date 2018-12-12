@@ -98,6 +98,7 @@ alias asc="ase_structure_converter.py"
 alias clean="source ~/bin/clean-test-dir.sh"
 alias start-jnbk-svr="jupyter_notebook_server_start.sh"
 alias kill-jnbk-svr="screen -X -S jnbk_server quit"
+alias nvim="nvim.appimage"
 ##H------------------------------------------------------------------------
 ##H Other Aliases
 ##H------------------------------------------------------------------------
@@ -173,7 +174,7 @@ alias lll=ll
 alias mroe=more
 alias mkdri=mkdir
 alias pdw=pwd
-
+alias gti=git
 ##H
 ##H-----------------------------------------------------------------------
 ##H Shorthand
