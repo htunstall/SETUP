@@ -97,9 +97,10 @@ export PATH=$PATH:$HOME/.local/bin
 export PATH="$HOME/anaconda3/bin:$PATH"
 ##H
 ##H--------------------------------------------------------------------------
-##H Modules to load
+##H Specific alias'
 ##H--------------------------------------------------------------------------
 ##H
-##H  N/A
+##H  mount-sd-wwrite
+alias mount-sd-wwrite="mount_sdcard_chrx.sh"
 ##H
 #H========================================================================
