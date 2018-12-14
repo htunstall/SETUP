@@ -8,9 +8,9 @@ usage="$(basename $0) [options] -- Moves all non-default files to the raw-data d
 git_repo_path="/storage/chem/msufgx/postgrad/software/SiC-framework"
 
 # Default to not (force) delete/overwrite files in the directory
-delete=False
-overwrite=False
-force=False
+delete=false
+overwrite=false
+force=false
 
 # Get options
 while getopts 'hdof' option; do
@@ -18,11 +18,11 @@ while getopts 'hdof' option; do
       h) echo "$usage"
          exit
          ;;
-      d) delete=True
+      d) delete=true
          ;;
-      o) overwrite=True
+      o) overwrite=true
          ;;
-      f) force=True
+      f) force=true
          ;;
      \?) echo "Invalid Option: -$OPTARG"
          exit 1
@@ -34,7 +34,7 @@ done
 data_path="$git_repo_path/raw-data"
 basename=$(basename $(pwd))
 # If we're in the correct directory
-if [ "$basename" == "run_dir" ]; then
+if [ "$basename" = "run_dir" ]; then
    # If the hidden directory doesn't exist make it
    if [ ! -d ".default-files" ]; then
       mkdir .default-files
@@ -43,8 +43,8 @@ if [ "$basename" == "run_dir" ]; then
    mv default_* .default-files
    mv test.bugs_script* .default-files
 
-   if [ "$delete" == True ]; then
-      if [ "$force" == True ]; then
+   if [ $delete = true ]; then
+      if [ $force = true ]; then
          rm -r -f *
       else
          rm -r -i *
@@ -53,7 +53,7 @@ if [ "$basename" == "run_dir" ]; then
       # For each *.json file in the testing directory
       for filename in ./*.json; do
          # If the json file exists
-         if [[ (-f $data_path/$filename) && "$overwrite" == False ]]; then
+         if [ -f $data_path/$filename] && [ $overwrite = false ]; then
             echo "Data relating to '$filename' not moved as it already exists in raw-data. If you wish to overwrite data please use -o"
          else
             # Cut of run_ by removeing upto the first "_" character
@@ -61,7 +61,7 @@ if [ "$basename" == "run_dir" ]; then
             # Cut everythin after the last "-" character
             general_filename=${general_filename%-*}
 
-            if [[ ("$overwrite" == True) && "$force" == True ]]; then
+            if [ $overwrite = true ] && [ $force = true ]; then
                mv -f *$general_filename* $data_path
             else
                mv -i *$general_filename* $data_path
