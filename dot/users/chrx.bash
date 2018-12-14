@@ -94,7 +94,7 @@ alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process
 ##H  Add user local bin directories
 ##H  Add the anaconda 3 bin 
 export PATH=$PATH:$HOME/.local/bin
-export PATH="/media/sdcard/anaconda3/bin:$PATH"
+export PATH="$HOME/sdcard/anaconda3/bin:$PATH"
 ##H
 ##H--------------------------------------------------------------------------
 ##H Specific alias'
