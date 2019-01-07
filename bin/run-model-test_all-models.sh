@@ -25,7 +25,7 @@ fi
 
 if [ "$1" ]; then
    # If we're in the correct directory
-   if [ "$basename" == "run_dir" ]; then
+   if [ "$basename" = "run_dir" ]; then
       # If we're in a singularity container
       if [ "$SINGULARITY_CONTAINER" ]; then
          echo "Settings: Label="$'\e[1m'$label$'\e[0m'" - Structure="$'\e[1m'$1$'\n\e[0m'
