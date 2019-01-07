@@ -140,6 +140,7 @@ alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process
 ##H  ssh-tinis  - The same as above but for tinis
 alias orac="ssh $USER@orac.csc.warwick.ac.uk"
 alias tinis="ssh $USER@tinis.csc.warwick.ac.uk"
+alias athena="ssh -l tunstall athena.hpc-midlands-plus.ac.uk"
 
 ##H
 ##H--------------------------------------------------------------------------
