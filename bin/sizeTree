@@ -1,0 +1,510 @@
+#!/usr/bin/perl
+#eval 'exec perl -S $0 $*'
+#if 0;
+
+#***********     ***************************************************************
+#*          *****                                                              *
+#*    ///     /    ////   /////  /   /    ///   /////                          *
+#*   /   /   / /   /   /  /      /   /   /   /  /                              *
+#*   /      /   /  /   /  /      //  /   /      /       Copyright (c) 2005     *
+#*   /      /////  /   /  ////   / / /   /      ////    Cadence Design Systems *
+#*   /      /   /  /   /  /      /  //   /      /       All Rights Reserved    *
+#*   /   /  /   /  /   /  /      /   /   /   /  /                              *
+#*    ///   /   /  ////   /////  /   /    ///   /////                          *
+#*                                                                             *
+#*******************************************************************************
+
+#*******************************************************************************
+#*
+#* $Id: sizeTree,v 1.2 2005/02/25 16:17:47 tunstall Exp $
+#*
+#* Recursive summation of files and reporting once a branch of the directory
+#* tree is larger than a specified threshold
+#*
+#* ASSUMPTIONS
+#* ~~~~~~~~~~~
+#* - Files and directories are accessible
+#*   - A warning is issued if directories are not readable
+#*
+#* TODO
+#* ----
+#* 1.  Get big tree reports to agree with 'du -sb .'
+#*
+#*******************************************************************************
+
+#-----------------------------------------------------------------------
+# Main program
+#-----------------------------------------------------------------------
+#use strict 'vars';
+&init;
+&parseArgs;
+&summarizeSizes;
+exit(0);
+
+
+#*****************************************************************************
+# init()
+# =>
+#
+# Initialize global variables etc.
+#
+#*****************************************************************************
+sub init {
+
+    #-------------------------------------------------------------------
+    # No debug by default
+    #-------------------------------------------------------------------
+    $::DEBUG = 0;
+
+    #-------------------------------------------------------------------
+    # Filename pattern to match
+    #-------------------------------------------------------------------
+    $matchFilePat = '.*';
+
+    #-------------------------------------------------------------------
+    # Filename pattern to match
+    #-------------------------------------------------------------------
+    $matchUidPat = '.*';
+
+    #-------------------------------------------------------------------
+    # Default size above which directories are reported individually
+    #-------------------------------------------------------------------
+    $showDirGreaterThan = 10000000;
+    $scaleSize          = 1000000;
+
+    #-------------------------------------------------------------------
+    # Files/Directories to process
+    #-------------------------------------------------------------------
+    chomp($curDir = `pwd`);
+    opendir(DIR, $curDir);
+    @filesToCheck = readdir(DIR);
+    closedir(DIR);
+    @filesToCheck = &skipParentDir(@filesToCheck);
+    # foreach $dbf (@filesToCheck) {
+    #     print("DEBUG: $dbf\n");
+    # }
+
+    #-------------------------------------------------------------------
+    # Directory level
+    #
+    #     0 = top
+    #     1 = directories in '0'
+    #     2 = directories in '1'
+    #     etc.
+    #-------------------------------------------------------------------
+    # $dirLevel = -1;
+
+}
+
+
+#*****************************************************************************
+# usage()
+# =>
+#
+# Print the usage information for this program.  If an argument is passed to
+# this procedure it is printed too (before usage information).
+#
+#*****************************************************************************
+sub usage {
+
+    my($exitCode, $msg) = @_;
+
+    #-------------------------------------------------------------------
+    # Print any message passed to the routine as the first argument
+    # in the argument list
+    #-------------------------------------------------------------------
+    print STDERR "\nERROR: $msg\n" if $msg;
+
+    #-------------------------------------------------------------------
+    # Exit with usage information
+    #-------------------------------------------------------------------
+    $! = $exitCode;
+    die <<EOF;
+
+usage: $0
+           [-limit <value>] [-user <user account name>]
+           [-match <string>] [-help] [directory]
+
+Summarize the size of files stored in a directory tree.
+
+Switches
+--------
+    -limit      Report sub-trees with sizes bigger than <value> (In MB)
+
+                i.e. Use 10 to report trees > 10,000,000 bytes
+                [Default = 10]
+
+    -match      File pattern to match (Perl regexp) against <string>
+
+    -user       Report on files owned by <user account name>
+
+    -help       This information
+
+EOF
+
+} # sub usage
+
+
+#*****************************************************************************
+# parseArgs()
+# => Changes global settings
+#
+# Take the command line inputs and use to set global variables that cause the
+# script to behave appropriately.
+#
+#*****************************************************************************
+sub parseArgs {
+
+    #-----------------------------------------------------------------------
+    # Use the neat long 'getopts' stuff
+    #-----------------------------------------------------------------------
+    use Getopt::Long;
+    &usage
+        if(
+            !GetOptions(
+                "limit=f",
+                "match=s",
+                "user=s",
+                "debug:i"
+            )
+        );
+
+    #-------------------------------------------------------------------
+    # Do that debug thing...
+    #-------------------------------------------------------------------
+    $::DEBUG = $::opt_debug if($::opt_debug);
+
+    #-------------------------------------------------------------------
+    # Reset the matching string if necessary
+    #-------------------------------------------------------------------
+    $matchFilePat = $opt_match if($opt_match);
+    print("MATCH: <$opt_match>\n") if($::DEBUG > 1);
+
+    #-------------------------------------------------------------------
+    # Reset the matching UID if necessary
+    #-------------------------------------------------------------------
+    if($opt_user) {
+        $matchUidName = $opt_user;
+        ($login, $pass, $matchUidPat, $gid) = getpwnam($matchUidName)
+            or &usage(2, "User: '$matchUidName' was not found in the system password file");
+        print("UID name:  <$opt_user>\n") if($::DEBUG > 1);
+        print("UID value: <$matchUidPat>\n") if($::DEBUG > 1);
+    }
+
+    #-------------------------------------------------------------------
+    # Set the limit above which drectories are reported
+    #-------------------------------------------------------------------
+    $showDirGreaterThan = $opt_limit * $scaleSize if($opt_limit);
+
+    #-------------------------------------------------------------------
+    # Anything left on the command line at this point are the
+    # directories/files to report on
+    #-------------------------------------------------------------------
+    if($#ARGV == 0) {
+        chomp($curDir = `pwd`);
+        opendir(DIR, $curDir);
+        @filesToCheck = readdir(DIR);
+        closedir(DIR);
+        @filesToCheck = &skipParentDir(@filesToCheck);
+    } elsif($#ARGV >= 0) {
+        @filesToCheck = @ARGV
+    }
+
+
+} # sub parseArgs
+
+
+#*******************************************************************************
+# commas(num)
+# => comma printed integer
+#
+# num: Number to add the commas into
+# 
+# Given an integer return with commas to make the output more readable.
+# 
+#*******************************************************************************
+sub commas {
+    my($num) = @_;
+
+    #-------------------------------------------------------------------
+    # Keep adding commas until there is no room
+    #-------------------------------------------------------------------
+    1 while ($num =~ s/(.*\d)(\d\d\d)/$1,$2/);
+
+    #-------------------------------------------------------------------
+    # Return the comma inserted number
+    #-------------------------------------------------------------------
+    $num;
+
+} # sub commas
+
+
+#*****************************************************************************
+# dirSort()
+# => Sorted list
+#
+# Sorted list with directories first
+#
+#*****************************************************************************
+sub dirSort {
+    if( -d $a &&  -d $b) {return(0)};
+    if(!-d $a && !-d $b) {return(0)};
+    if(!-d $a)           {return(1)};
+    -1;
+} # sub dirSort
+
+
+#*****************************************************************************
+# skipParentDir(@fileList)
+# => @cpFiles
+#
+# Remove the dot files from the list of files to copy.
+#
+#*****************************************************************************
+sub skipParentDir {
+
+    #-------------------------------------------------------------------
+    # Local variables
+    #-------------------------------------------------------------------
+    my(@curList) = @_;
+    my $file;
+    my @cpFiles;
+
+    printf("DEBUG: curList = @curList\n\n") if ($::DEBUG > 2);
+
+    FILE:
+    foreach $file (@curList) {
+
+        #---------------------------------------------------------------
+        # Don't add to list to copy
+        #---------------------------------------------------------------
+        next FILE if($file =~ /^\.\./);
+
+        #---------------------------------------------------------------
+        # Rebuild the copy list with non-dot files
+        #---------------------------------------------------------------
+        push(@cpFiles, $file);
+        
+    } # foreach
+
+    #-------------------------------------------------------------------
+    # Just like SKILL the last thing evaluated is returned...
+    #-------------------------------------------------------------------
+    @cpFiles;
+
+} # sub skipParentDir
+
+
+
+#*****************************************************************************
+# sizeFiles()
+# => $totalSize
+#
+# Add up the size of files in a directory
+#
+# NOTE: The $path variable MUST be global to allow the hierarchy that has
+#       been decended into be printed out sensibly.
+#
+#*****************************************************************************
+sub sizeFiles {
+
+    my(@fileList) = @_;
+    my $size;
+    my $totSize;
+    my $reported;
+    my $reportedBelow;
+
+
+    $size    = 0;
+    $totSize = 0;
+
+    printf("DEBUG: File list = @fileList\n") if($::DEBUG > 2);
+
+    #-------------------------------------------------------------------
+    # Sort the arguments so that directories come first.  Without this the
+    # summary misses some out because higher level directories are reported
+    # first
+    #-------------------------------------------------------------------
+    @fileList = sort(dirSort @fileList);
+    
+    FILE:
+    foreach $file (@fileList) {
+
+        (
+            $dev,   $ino,     $mode,  $nlink,   $uid,
+            $gid,   $rdev,    $size,  $atime,   $mtime,
+            $ctime, $blksize, $blocks
+        )
+            = lstat($file);
+
+        # printf("DEBUG: Linked File (%s) # links = %d\n", $file, $nlink)
+        #     if($::DEBUG > 2);
+
+        # printf("DEBUG: $file\n");
+        # printf("DEBUG: $dev,   $ino,     $mode,  $nlink,   $uid,
+        # $gid,   $rdev,    $size,  $atime,   $mtime,
+        # $ctime, $blksize, $blocks\n");
+
+        # Report size actually taken on the disk!
+        $size = $blocks * 512;
+
+        CASE:
+        {
+            # if(-k _) {print("DEBUG: skipping Sticky bit: $file\n"); last CASE};
+
+            if(-l _) {last CASE};
+
+            if(-d _) {
+
+                if(! -r _) {print("DEBUG: skipping unreadble: $file\n"); last CASE};
+
+                if($file eq "\.") {
+                    #---------------------------------------------------
+                    # Don't add in directory sizes unless it matches the
+                    # search pattern
+                    #---------------------------------------------------
+                    $size = 0 unless($file =~ /$matchFilePat/);
+                    $size = 0 unless($uid =~ /$matchUidPat/);
+                    last CASE
+                }
+
+                opendir(DIR, $file);
+                @dirFiles = readdir(DIR);
+                closedir(DIR);
+
+                if(chdir $file) {
+
+                    push(@path, $file);
+
+                    # DEBUG code
+                    # if($dirLevel <= 2) {
+                    #    foreach $dbf (@dirFiles) {
+                    #        print(" $dbf");
+                    #    }
+                    #    print("\n\n");
+                    # }
+
+                    #---------------------------------------------------
+                    # Increment the level we're at
+                    #---------------------------------------------------
+                    #$reportedBelow = 0;
+                    # $dirLevel++;
+
+                    # print("DEBUG: Increment dir Level ($dirLevel)\n")
+                    #     if($::DEBUG > 1);
+
+                    #---------------------------------------------------
+                    # Skip dot files
+                    #
+                    # TODO - Is this really necessary (switchable?)
+                    #---------------------------------------------------
+                    @dirFiles = &skipParentDir(@dirFiles);
+
+                    # printf("DEBUG: Recursion with: $file\n") if($::DEBUG > 1);
+
+                    ($size, $reported) = &sizeFiles(@dirFiles);
+
+                    $reportedBelow += $reported;
+
+                    # printf("DEBUG: Path length = $#path\n") if($::DEBUG > 1);
+
+                    #---------------------------------------------------
+                    # Print out a summary if the directory is bigger
+                    # than the limit, but don't do the top level that is
+                    # being reported as this is summarized in the total
+                    #---------------------------------------------------
+                    $reportSize = $size - $reported;
+                    if($reportSize > $showDirGreaterThan) {
+                        printf("%16s  ", &commas($reportSize));
+                        foreach $p (@path) {
+                            print($p, "/");
+                        }
+                        print("\n");
+
+                        # printf(
+                        #     "%sDEBUG: Reported - %6d, Below - %6d\n",
+                        #     "                                    ",
+                        #     $reportSize, 
+                        #     $reportedBelow
+                        # ) if($::DEBUG > 0);
+
+                        #-----------------------------------------------
+                        # Keep a track of file we've reported or skipped
+                        # so we can report the difference at the end...
+                        #-----------------------------------------------
+                        $reportedBelow += $reportSize;
+
+                    }
+                    pop(@path);
+
+                    #---------------------------------------------------
+                    # Decrement the level we're at
+                    #---------------------------------------------------
+                    # $dirLevel--;
+                    # print("DEBUG: Decrement dir Level ($dirLevel)\n") if($::DEBUG > 1);
+
+                    #---------------------------------------------------
+                    # Get back to where we came from
+                    #---------------------------------------------------
+                    chdir "..";
+
+                    last CASE;
+
+                } else {
+                    printf("WARNING: Couldn't check data under: ");
+                    foreach $p (@path) {
+                        print($p, "/");
+                    }
+                    print("$file\n");
+                    # next CASE
+                };
+
+            } 
+
+            $size = 0 unless($file =~ /$matchFilePat/);
+            $size = 0 unless($uid =~ /$matchUidPat/);
+
+        } # CASE:
+
+        $totSize += $size;
+
+        # printf("DEBUG: Adding %6d (%6d) %s\n", $size, $totSize, $file) 
+        #     if($::DEBUG > 2);
+
+    } # foreach
+
+    # printf("RETURN: size = %5d,  Reported = %5d\n", $totSize, $reportedBelow)
+    #     if($::DEBUG > 0);
+
+    #-------------------------------------------------------------------
+    # Return the values we've found to the calling routine
+    #-------------------------------------------------------------------
+    ($totSize, $reportedBelow);
+
+    # printf("DEBUG: Overall Running Total = $totSize\n");
+
+} # sub sizeFiles
+
+
+#*****************************************************************************
+# summarizeSizes()
+# =>
+#
+# Do the summary and wrapup...
+#
+#*****************************************************************************
+sub summarizeSizes {
+
+    my $total;
+
+    # print("DEBUG: Dir Level ($dirLevel)\n") if($::DEBUG > 2);
+
+    ($total, $reportedSoFar) = &sizeFiles(@filesToCheck);
+
+    # printf("DEBUG: Overall Total = $total\n") if($::DEBUG > 1);
+
+    printf("%16s  Other files in tree\n", &commas($total - $reportedSoFar));
+    printf("%16s\n", "-" x 13);
+    printf("%16s Total\n", &commas($total));
+
+}
