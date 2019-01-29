@@ -95,7 +95,7 @@
 ##H Other Aliases
 ##H------------------------------------------------------------------------
 ##H
-alias qwatch="watch -n 1 squeue -l -u tunstall"
+alias qwatch="watch -n 1 squeue -l -u tunstall -S P,j"
 ##H
 ##H---------------------------------------------------------------------------
 ##H SSH Alias'
