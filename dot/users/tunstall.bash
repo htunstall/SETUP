@@ -96,6 +96,7 @@
 ##H------------------------------------------------------------------------
 ##H
 alias qwatch="watch -n 1 squeue -l -u tunstall -S P,j"
+alias qe_rsync="rsync -rL --exclude='*.save' * msufgx@barbagallo.csc.warwick.ac.uk:/storage/chem/msufgx/postgrad/software/SiC-framework/testing-dir/QuantumEspresso/athena"
 ##H
 ##H---------------------------------------------------------------------------
 ##H SSH Alias'
