@@ -146,32 +146,35 @@ alias athena="ssh -X -l tunstall athena.hpc-midlands-plus.ac.uk"
 ##H--------------------------------------------------------------------------
 ##H Additions to the PATH
 ##H--------------------------------------------------------------------------
-##H  Turbomole scripts added to path
-export PATH=$PATH:$HOME/Turbomole/TURBOMOLE/bin/em64t-unknown-linux-gnu:/home/chem/msufgx/Turbomole/TURBOMOLE/scripts
+##H  If we are not in a sungularity container, add to the path and load modules
+if [ ! "$SINGULARITY_CONTAINER" ]; then
 
-##H  Turbomole TURBODIR exported to env
-export TURBODIR=$HOME/Turbomole/TURBOMOLE
+    ##H  Turbomole scripts added to path
+    export PATH=$PATH:$HOME/Turbomole/TURBOMOLE/bin/em64t-unknown-linux-gnu:/home/chem/msufgx/Turbomole/TURBOMOLE/scripts
 
-##H  Ovito bin added to path
-export PATH=$HOME/ovito-2.9.0-x86_64/bin/:$PATH
+    ##H  Turbomole TURBODIR exported to env
+    export TURBODIR=$HOME/Turbomole/TURBOMOLE
 
-##H  Mendeley Desktop added to path
-export PATH=$HOME/programs/mendeleydesktop-1.19.2-linux-x86_64/bin:$PATH
+    ##H  Ovito bin added to path
+    export PATH=$HOME/ovito-2.9.0-x86_64/bin/:$PATH
 
-##H  LAMMPS script path
-export PATH=/storage/chem/msufgx/postgrad/software/SiC-framework/testing-dir/lammps/scripts/lammps:$PATH
+    ##H  Mendeley Desktop added to path
+    export PATH=$HOME/programs/mendeleydesktop-1.19.2-linux-x86_64/bin:$PATH
 
-##H
-##H--------------------------------------------------------------------------
-##H Modules to load
-##H--------------------------------------------------------------------------
-##H  Loaded VMD
-##H  Loaded GCC
-module load VMD/1.9.1
-module load intel/2018.1.163-GCC-6.4.0-2.28
-module load binutils/2.28
-module load impi/2018.1.163
+    ##H  LAMMPS script path
+    export PATH=/storage/chem/msufgx/postgrad/software/SiC-framework/testing-dir/lammps/scripts/lammps:$PATH
 
+    ##H
+    ##H--------------------------------------------------------------------------
+    ##H Modules to load
+    ##H--------------------------------------------------------------------------
+    ##H  Loaded VMD
+    ##H  Loaded GCC
+    module load VMD/1.9.1
+    module load intel/2018.1.163-GCC-6.4.0-2.28
+    module load binutils/2.28
+    module load impi/2018.1.163
+fi
 #module load QuantumESPRESSO
 ##H Otherwise we're on tinnis/orac
 #else
