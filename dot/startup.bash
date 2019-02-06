@@ -46,7 +46,7 @@ if [ "$PS1" ]; then
    #-------------------------------------------------------------------
    # Set my gnome titles
    #-------------------------------------------------------------------
-   PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME} | ${PWD/#$HOME/~}"; echo -ne "\007"'
+   PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} | ${PWD/#$HOME/~}"; echo -ne "\007"'
 
    #-------------------------------------------------------------------
    # Hack for history settings
