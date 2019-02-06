@@ -105,7 +105,8 @@ alias nvim="nvim.appimage"
 ##H
 ##H  tunnel-ssh
 alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.csc.warwick.ac.uk"
-alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+alias tunnel-status="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+alias w_cpu="watch -n0.2 'cat /proc/cpuinfo | grep MHz'"
 ##H========================================================================
 ##H
 

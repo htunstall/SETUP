@@ -140,7 +140,7 @@ alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process
 ##H  ssh-tinis  - The same as above but for tinis
 alias orac="ssh $USER@orac.csc.warwick.ac.uk"
 alias tinis="ssh $USER@tinis.csc.warwick.ac.uk"
-alias athena="ssh -l tunstall athena.hpc-midlands-plus.ac.uk"
+alias athena="ssh -X -l tunstall athena.hpc-midlands-plus.ac.uk"
 
 ##H
 ##H--------------------------------------------------------------------------
@@ -171,7 +171,8 @@ module load VMD/1.9.1
 module load intel/2018.1.163-GCC-6.4.0-2.28
 module load binutils/2.28
 module load impi/2018.1.163
-module load QuantumESPRESSO
+
+#module load QuantumESPRESSO
 ##H Otherwise we're on tinnis/orac
 #else
 #   module load GCC/6.4.0-2.28
