@@ -134,7 +134,7 @@ alias tunnel-status="ps aux | grep ssh; echo 'kill <process_id> -- where process
 ##H HPC Alias'
 ##H------------------------------------------------------------------------
 ##H
-alias qwatch_fat="watch -n 1 squeue -p fat -l S P,u,j"
+alias qwatch_fat="watch -n 1 squeue -p fat -lS P,u,j"
 
 ##H
 ##H--------------------------------------------------------------------------
