@@ -126,7 +126,15 @@ alias kill-jnbk-svr="screen -X -S jnbk_server quit"
 ##H
 ##H  tunnel-ssh
 alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.csc.warwick.ac.uk"
-alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+alias tunnel-status="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
+
+
+##H
+##H------------------------------------------------------------------------
+##H HPC Alias'
+##H------------------------------------------------------------------------
+##H
+alias qwatch_fat="watch -n 1 squeue -p fat -l S P,u,j"
 
 ##H
 ##H--------------------------------------------------------------------------
