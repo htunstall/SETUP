@@ -129,25 +129,11 @@ alias tunnel-ssh="ssh -N -f -L localhost:8888:localhost:8888 msufgx@barbagallo.c
 alias tunnel-ststus="ps aux | grep ssh; echo 'kill <process_id> -- where process_id is the second column'"
 
 ##H
-##H---------------------------------------------------------------------------
-##H SSH Alias'
-##H---------------------------------------------------------------------------
-##H
-##H  ssh-orac   - ssh $username@orac.csc.warwick.ac.uk
-##H                                          # Connects to orac using the
-##H                                             ssh pub/priv key pair and
-##H                                             the username variable
-##H  ssh-tinis  - The same as above but for tinis
-alias orac="ssh $USER@orac.csc.warwick.ac.uk"
-alias tinis="ssh $USER@tinis.csc.warwick.ac.uk"
-alias athena="ssh -X -l tunstall athena.hpc-midlands-plus.ac.uk"
-
-##H
 ##H--------------------------------------------------------------------------
 ##H Additions to the PATH
 ##H--------------------------------------------------------------------------
 ##H  If we are not in a sungularity container, add to the path and load modules
-if [ ! "$SINGULARITY_CONTAINER" ]; then
+if [ ! "$SINGULARITY_CONTAINER" ] && [ "$HOSTNAME" = "barbagallo.csc.warwick.ac.uk" ]; then
 
     ##H  Turbomole scripts added to path
     export PATH=$PATH:$HOME/Turbomole/TURBOMOLE/bin/em64t-unknown-linux-gnu:/home/chem/msufgx/Turbomole/TURBOMOLE/scripts
