@@ -13,5 +13,5 @@ if [ "$GROUP" = "msufgx" ]; then
 else
   cwd="$HOME"
 fi
-$HOME/anaconda3/bin/jupyter notebook --notebook-dir=$cwd --no-browser
+$HOME/anaconda3/bin/jupyter notebook --notebook-dir=$cwd --no-browser --port 8888
 #exec bash
