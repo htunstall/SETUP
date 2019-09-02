@@ -158,16 +158,6 @@ if [ ! "$SINGULARITY_CONTAINER" ] && [ "$HOSTNAME" = "barbagallo.csc.warwick.ac.
     ##H  LAMMPS script path
     export PATH=/storage/chem/msufgx/postgrad/software/SiC-framework/testing-dir/lammps/scripts/lammps:$PATH
 
-    ##H
-    ##H--------------------------------------------------------------------------
-    ##H Modules to load
-    ##H--------------------------------------------------------------------------
-    ##H  Loaded VMD
-    ##H  Loaded GCC
-    module load VMD/1.9.1
-    module load intel/2018.1.163-GCC-6.4.0-2.28
-    module load binutils/2.28
-    module load impi/2018.1.163
 fi
 #module load QuantumESPRESSO
 ##H Otherwise we're on tinnis/orac
